@@ -42,7 +42,7 @@ const CryptoDashboard = () => {
             <h2 className="text-sm font-semibold text-gray-600 uppercase tracking-wide">
               {coin}
             </h2>
-            <p className="text-lg font-bold mt-2">
+            <p className="text-lg font-bold mt-2 text-black">
               {prices[coin]?.usd ? `$${prices[coin].usd.toFixed(2)}` : 'Loading...'}
             </p>
           </div>
