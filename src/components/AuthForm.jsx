@@ -12,13 +12,14 @@ const AuthForm = ({ onLogin }) => {
       setError('Please fill in both fields');
       return;
     }
-
+  
     const storedUser = JSON.parse(localStorage.getItem('user'));
-
+  
     if (isRegister) {
       // Register flow
       const newUser = { username, password };
       localStorage.setItem('user', JSON.stringify(newUser));
+      localStorage.setItem('currentUser', JSON.stringify({ username })); // NEW
       onLogin({ username });
     } else {
       // Login flow
@@ -27,6 +28,7 @@ const AuthForm = ({ onLogin }) => {
         storedUser.username === username &&
         storedUser.password === password
       ) {
+        localStorage.setItem('currentUser', JSON.stringify({ username })); // NEW
         onLogin({ username });
         setError('');
       } else {
@@ -34,6 +36,7 @@ const AuthForm = ({ onLogin }) => {
       }
     }
   };
+  
 
   return (
     <div className="min-h-screen flex items-center justify-center bg-gray-100">
@@ -86,3 +89,8 @@ const AuthForm = ({ onLogin }) => {
 };
 
 export default AuthForm;
+
+
+// kommer inte ihåg så jag kan logga in igen. Användaren sparas inte?
+
+// Välja vilken crypto som ska visas och spara det på användaren?

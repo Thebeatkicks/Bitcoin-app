@@ -1,14 +1,14 @@
 import React, { useEffect, useState } from 'react';
 
-const CryptoDashboard = () => {
+const CryptoDashboard = ({ selectedCoins }) => {
   const [prices, setPrices] = useState({});
   const [error, setError] = useState(null);
 
-  const coins = ['bitcoin', 'ethereum', 'dogecoin', 'solana', 'litecoin'];
-
   const fetchPrices = async () => {
+    if (!selectedCoins.length) return;
+
     try {
-      const ids = coins.join(',');
+      const ids = selectedCoins.join(',');
       const response = await fetch(
         `https://api.coingecko.com/api/v3/simple/price?ids=${ids}&vs_currencies=usd`
       );
@@ -16,16 +16,22 @@ const CryptoDashboard = () => {
       setPrices(data);
       setError(null);
     } catch (err) {
-      setError('Failed to fetch prices');
       console.error(err);
+      setError('Failed to fetch prices');
     }
   };
 
   useEffect(() => {
+  if (!selectedCoins.length) return;
+
+  fetchPrices();
+
+  const interval = setInterval(() => {
     fetchPrices();
-    const interval = setInterval(fetchPrices, 10000);
-    return () => clearInterval(interval);
-  }, []);
+  }, 10000);
+
+  return () => clearInterval(interval);
+}, [selectedCoins]);
 
   return (
     <div className="p-6 max-w-6xl mx-auto">
@@ -34,7 +40,7 @@ const CryptoDashboard = () => {
       {error && <p className="text-red-600 text-center mb-4">{error}</p>}
 
       <div className="grid grid-cols-2 sm:grid-cols-3 md:grid-cols-5 gap-4">
-        {coins.map((coin) => (
+        {selectedCoins.map((coin) => (
           <div
             key={coin}
             className="bg-white rounded-xl shadow-md p-4 text-center hover:shadow-lg transition-shadow"
